@@ -1,0 +1,22 @@
+Flask==3.0.0
+Werkzeug==3.0.1
+Jinja2==3.1.2
+itsdangerous==2.1.2
+click==8.1.7
+
+✅ Why these libraries?
+
+Flask → Web framework
+
+Werkzeug → Request & response handling
+
+Jinja2 → HTML templates
+
+itsdangerous → Session security
+
+click → Command-line support
+
+
+📌 These are Flask core dependencies, so your project will run without errors.
+
+ 
