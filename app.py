@@ -1,47 +1,30 @@
-import sqlite3
-import os
-
-def init_db():
-    if not os.path.exists("quiz.db"):
-        conn = sqlite3.connect("quiz.db")
-        cur = conn.cursor()
-
-        cur.execute("""
-        CREATE TABLE users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL
-        )
-        """)
-
-        cur.execute("""
-        CREATE TABLE questions (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            question TEXT NOT NULL,
-            option1 TEXT,
-            option2 TEXT,
-            option3 TEXT,
-            option4 TEXT,
-            answer TEXT
-        )
-        """)
-
-        conn.commit()
-        conn.close()
-
 from flask import Flask, render_template, request, redirect, session, url_for
 import sqlite3
 
 def init_db():
-    conn = sqlite3.connect('quiz.db')
-    cursor = conn.cursor()
-    cursor.execute("""
-        CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE,
-            password TEXT
-        )
+    conn = sqlite3.connect("quiz.db")
+    cur = conn.cursor()
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE,
+        password TEXT
+    )
     """)
+
+    cur.execute("""
+    CREATE TABLE IF NOT EXISTS questions (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        question TEXT,
+        option1 TEXT,
+        option2 TEXT,
+        option3 TEXT,
+        option4 TEXT,
+        answer TEXT
+    )
+    """)
+
     conn.commit()
     conn.close()
 
@@ -49,7 +32,7 @@ app = Flask(__name__)
 app.secret_key = "quizsecret"
 
 def get_db():
-    return sqlite3.connect("database.db")
+    return sqlite3.connect("quiz.db")
 
 @app.route("/", methods=["GET", "POST"])
 def login():
@@ -85,6 +68,7 @@ def quiz():
 
 @app.route("/logout")
 def logout():
+
     session.pop("user", None)
     return redirect("/")
 
