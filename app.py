@@ -1,6 +1,19 @@
 from flask import Flask, render_template, request, redirect, session, url_for
 import sqlite3
 
+def init_db():
+    conn = sqlite3.connect('quiz.db')
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT UNIQUE,
+            password TEXT
+        )
+    """)
+    conn.commit()
+    conn.close()
+
 app = Flask(__name__)
 app.secret_key = "quizsecret"
 
@@ -63,4 +76,6 @@ def register():
 
     return render_template('register.html')
 
-app.run(debug=True)
+if __name__ == "__main__":
+    init_db()
+    app.run(debug=True)
