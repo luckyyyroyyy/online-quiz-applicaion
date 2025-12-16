@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, session
+from flask import Flask, render_template, request, redirect, session, url_for
 import sqlite3
 
 app = Flask(__name__)
@@ -44,5 +44,23 @@ def logout():
     session.pop("user", None)
     return redirect("/")
 
-app.run(debug=True) 
- 
+@app.route('/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        conn = sqlite3.connect('quiz.db')
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO users (username, password) VALUES (?, ?)",
+            (username, password)
+        )
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for('login'))
+
+    return render_template('register.html')
+
+app.run(debug=True)
